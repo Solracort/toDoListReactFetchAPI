@@ -5,7 +5,11 @@ const Home = () => {
 	const [array, setArray] = useState([]);
 
 	function addTask (e){
-		setArray(array.concat(input));
+		console.log(e.keyCode);
+		if(e.keyCode === 13){
+			setArray(array.concat(input));
+			setInput("");
+		}
 	}
 	function deleteTask(index){
 		let borrar = array[index]
@@ -13,11 +17,12 @@ const Home = () => {
 	}
 	
 	return (
-		<div className="container">
+		<div className="container" >
+			<h1>todos</h1>
 			<ul id="myList">
-				<li>
-					<input onChange={(e)=>setInput(e.target.value)} placeholder="Introduzca una tarea"></input>
-					<button onClick={addTask}>+</button>
+				<li className="justify-content-between">
+					<input onKeyDown={addTask} onChange={(e)=>setInput(e.target.value)} value={input} placeholder="Introduzca una tarea"></input>
+					
 				</li>
 				{array.map((item,index) => (
 					<li key={index}>
@@ -25,6 +30,7 @@ const Home = () => {
 					</li>
 				))}
 			</ul>
+			<p>{array.length} items left</p>
 		</div>
 	);
 };
