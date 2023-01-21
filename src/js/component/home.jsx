@@ -6,7 +6,6 @@ const Home = () => {
 	function addTask (e){
 		console.log(e.keyCode);
 		if(e.keyCode === 13){
-//{label: 'sample task', done: false}
 			setArray(array.concat({label:input, done:true}));
 			setInput("");
 			enviarLista();
@@ -29,9 +28,8 @@ const Home = () => {
 		fetch('https://assets.breatheco.de/apis/fake/todos/user/solracort',{
 			method: 'PUT', // *GET, POST, PUT, DELETE, etc.
 			headers: {
-				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-			  },
+				'Content-Type': 'application/json'// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
 			  body: JSON.stringify(array)  //body data type must match "Content-Type" header
 		})//busca la info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
@@ -42,9 +40,8 @@ const Home = () => {
 		fetch('https://assets.breatheco.de/apis/fake/todos/user/solracort',{
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			headers: {
-				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-			  },
+				'Content-Type': 'application/json'// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
 			  body: JSON.stringify([]) // body data type must match "Content-Type" header
 		})//busca la info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
@@ -57,26 +54,25 @@ const Home = () => {
 			headers: {
 				'Content-Type': 'application/json'
 				// 'Content-Type': 'application/x-www-form-urlencoded',
-			  },
-			  // body data type must match "Content-Type" header
+			},
+			
 		})//busca la info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
 		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
 	}
 	useEffect(() => {
-		//crearUsuario();
+		crearUsuario();
 		traerLista();
 		console.log(array);
 		
 		console.log("Aqui llegamos");
-		//eliminarUsuario();
+		eliminarUsuario();
 		console.log("lo elimino");
 	}, [])
 	console.log(array);
 
 	return (
-		
 		<div className="container" >
 			<h1>todos</h1>
 			<ul id="myList">
