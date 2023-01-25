@@ -1,42 +1,48 @@
-
-body{
+body {
     margin-top: 100px;
 }
-ul{
+
+ul {
     padding: 0;
     margin-bottom: 0;
     width: 100%
 }
-ul li{
+
+ul li {
     border: 2px solid black;
     list-style: none;
     padding: 8px;
-    margin:2px;
-    display:flex;
+    margin: 2px;
+    display: flex;
     width: 100%;
     justify-content: space-between;
-    border:none;
-    
+    border: none;
+
 }
-h1{
+
+h1 {
     text-align: center;
 }
-input{
+
+input {
     border: none;
     width: 100%;
 }
-button {
-    background:transparent;
+
+#borrar {
+    background: transparent;
     margin-right: -5px;
-    border:none;
-    color:white;
+    border: none;
+    color: white;
 }
-button:hover{
-    color:black;
+
+#borrar:hover {
+    color: black;
 }
-.container{
-    border:1px solid black;
-    -webkit-box-shadow: 10px 10px 5px 0px rgba(10,6,1,0.2);
-    -moz-box-shadow: 10px 10px 5px 0px rgba(10,6,1,0.2);
-    box-shadow: 10px 10px 5px 0px rgba(10,6,1,0.2);
+
+.container {
+    border: 1px solid black;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(10, 6, 1, 0.2);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(10, 6, 1, 0.2);
+    box-shadow: 10px 10px 5px 0px rgba(10, 6, 1, 0.2);
 }
