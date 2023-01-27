@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from "react";//create your first component
 const url = 'https://assets.breatheco.de/apis/fake/todos/user/solracort';
+
+// NO TIENE SENTIDO, AL MENOS YO NO SE LO ENCUENTRO, ESTE CODIGO NO FUNCIONA, Y LO HE REPASADO 40 VECES, 
+// SI LE PUEDES ECHAR UN VISTAZO Y VES ALGO, VUELVE A DAR ERROR EN ARRAY?.CONCAT
+
 const Home = () => {
 	const [input, setInput] = useState("");
 	const [array, setArray] = useState([]);
@@ -8,17 +12,18 @@ const Home = () => {
 		console.log(e.keyCode);
 		if(e.key === 'Enter'){
 			setArray(array?.concat({label:input, done:true}));
-			setInput("");			
+			setInput("");		
+			enviarLista();	
 		}
 	}
 	function deleteTask(index){
 		let borrar = array[index]
 		setArray(array.filter((item) => item!=borrar))
+		enviarLista();
 	}
 	function traerLista(){
 		fetch( url,{
 			method: 'GET', // *GET, POST, PUT, DELETE, etc.
-			
 		})//trae info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
 		.then((data)=>setArray(data))//esta linea guarda la info transformada en un objeto
@@ -37,7 +42,7 @@ const Home = () => {
 		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el cat
 	}
-	async function crearUsuario() {
+	function crearUsuario() {
 		fetch(url,{
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			headers: {
@@ -49,11 +54,15 @@ const Home = () => {
 		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
 		
+		var myResponse = new Response();
+		
+		if (myResponse.ok){
 			console.log("USUARIO CREADO")
 			usuario=true;
+		}	
 	}
 	function eliminarUsuario(){
-		usuario=false;
+		
 		fetch(url ,{
 			method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
 			headers: {
@@ -65,24 +74,26 @@ const Home = () => {
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
 		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
-		console.log("SI EXISTE EL USUARIO HA SIDO BORRADO")
+		
+		var myResponse = new Response();
+		
+		if (myResponse.ok){
+			console.log("DATA DELETE: SI EXISTE, EL USUARIO HA SIDO BORRADO")
+			usuario=false;
+		}	
+		
 		
 	}
 	useEffect(() => {
 		
 		if (!usuario){
 			eliminarUsuario();
-			console.log("El usuario no existe se creará justo ahora");
+			console.log("Lanzamos la orden para crear el usuario");
 			crearUsuario();
 		}
-		traerLista();
-		console.log(array);		
+		(usuario) ? traerLista():console.log("No existe el usuario");		
 	}, [])
-	useEffect(()=>{
-		if (array.length!=0){
-			enviarLista();
-		}
-	},[array])
+	
 	
 	return (
 		<div className="container col-md-6" >
@@ -94,15 +105,15 @@ const Home = () => {
 				</li>
 				{array.length>0?array.map((item,index) => (
 					<li key={index}>
-						{item.label} <button id="borrar" onClick={()=>deleteTask(index)}>x</button>
+						{item.label} <button id="borrar" onClick={()=>deleteTask(index)}>X</button>
 					</li>
 				)):null}
 			</ul>
 			<p>{array.length} items left
 			</p>
-			<p className="col-md-6 text-center m-auto">
-			<button className="btn btn-primary col-md-3 m-auto" onClick={()=>crearUsuario()}>Crear Usuario</button>
-			<button className="btn btn-primary col-md-3 m-auto" onClick={()=>eliminarUsuario()}>Borrar Usuario</button>
+			<p className="col-md-6 text-center me-2 ">
+			
+			<button className="btn btn-primary col-md-4 m-auto" onClick={()=>eliminarUsuario()}>Borrar Usuario</button>
 			</p>
 		</div>
 	);
