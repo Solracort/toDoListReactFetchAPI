@@ -7,7 +7,7 @@ const url = 'https://assets.breatheco.de/apis/fake/todos/user/solracort';
 const Home = () => {
 	const [input, setInput] = useState("");
 	const [array, setArray] = useState([]);
-	let usuario=false;
+	// let usuario=false;
 	function addTask (e){
 		console.log(e.keyCode);
 		if(e.key === 'Enter'){
@@ -25,18 +25,28 @@ const Home = () => {
 		fetch( url,{
 			method: 'GET', // *GET, POST, PUT, DELETE, etc.
 		})//trae info en la url pasada como valor
-		.then((response)=>response.json())//esta linea convierte la respuesta en un json
-		.then((data)=>setArray(data))//esta linea guarda la info transformada en un objeto
+		.then((response)=>{
+			// console.log(response.status);
+			if(response.status === 404){
+				crearUsuario();
+			}
+			return response.json()
+		})//esta linea convierte la respuesta en un json
+		.then((data)=>setArray(data))//esta linea guarda la info transformada en un objeto y la coloca en nuestra vble array con SetArray
+		// .then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
 	}
 	function enviarLista(){
 		console.log(array)
+		let aux = [...array,{label:input,done:false}]
+		console.log(aux);
 		fetch(url,{
 			method: 'PUT', // *GET, POST, PUT, DELETE, etc.
 			headers: {
 				'Content-Type': 'application/json'// 'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: JSON.stringify(array)  //body data type must match "Content-Type" header
+			// body: JSON.stringify(array)  //body data type must match "Content-Type" header
+			body: JSON.stringify(aux)  //body data type must match "Content-Type" header
 		})//busca la info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
 		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
@@ -51,50 +61,35 @@ const Home = () => {
 			body: JSON.stringify([]) // body data type must match "Content-Type" header
 		})//busca la info en la url pasada como valor
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
-		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
+		.then((data)=>{
+			if(data.result === 'ok'){
+				traerLista()
+			}
+	})
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
-		
-		var myResponse = new Response();
-		
-		if (myResponse.ok){
-			console.log("USUARIO CREADO")
-			usuario=true;
-		}	
 	}
 	function eliminarUsuario(){
-		
 		fetch(url ,{
 			method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
 			headers: {
 				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			
-		})//busca la info en la url pasada como valor
+		},
+		})
 		.then((response)=>response.json())//esta linea convierte la respuesta en un json
-		.then((data)=>console.log(data))//esta linea guarda la info transformada en un objeto
+		.then((data)=>{
+			if (data.result ==='ok') {
+				setArray([])	
+			}
+			// console.log(data)
+		})//esta linea guarda la info transformada en un objeto
 		.catch((err)=>console.log(err))//el catch te comunica si algo salió mal
-		
-		var myResponse = new Response();
-		
-		if (myResponse.ok){
-			console.log("DATA DELETE: SI EXISTE, EL USUARIO HA SIDO BORRADO")
-			usuario=false;
-		}	
-		
-		
+		console.log("Borrdo usuario y tareas")
 	}
 	useEffect(() => {
 		
-		if (!usuario){
-			eliminarUsuario();
-			console.log("Lanzamos la orden para crear el usuario");
-			crearUsuario();
-		}
-		(usuario) ? traerLista():console.log("No existe el usuario");		
+		traerLista()		
 	}, [])
-	
-	
+		
 	return (
 		<div className="container col-md-6" >
 			<h1>todos</h1>
